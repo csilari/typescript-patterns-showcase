@@ -1,0 +1,51 @@
+### 1. Auto-Approve Software Expense
+# Demonstrates: Successful Strategy routing and Type Guard validation
+POST http://localhost:3000/approve/EXPENSE
+Content-Type: application/json
+
+{
+  "amount": 450,
+  "category": "Software",
+  "currency": "GBP"
+}
+
+### 2. Manual Review - Business Rule Triggered
+# Demonstrates: Logic inside the Software strategy (Threshold > 500)
+POST http://localhost:3000/approve/EXPENSE
+Content-Type: application/json
+
+{
+  "amount": 550,
+  "category": "Software",
+  "currency": "GBP"
+}
+
+### 3. Manual Review - Hardware Strategy
+# Demonstrates: A domain-specific rule where all items require a human eye
+POST http://localhost:3000/approve/EXPENSE
+Content-Type: application/json
+
+{
+  "amount": 50,
+  "category": "Hardware",
+  "currency": "GBP"
+}
+
+### 4. Invalid Data Structure (Type Guard catch)
+# Demonstrates: The Type Guard (isExpenseRequest) rejecting bad JSON before logic runs
+POST http://localhost:3000/approve/EXPENSE
+Content-Type: application/json
+
+{
+  "wrong_field": "This will fail validation",
+  "amount": "not_a_number"
+}
+
+### 5. Unknown Domain (Registry/IoC catch)
+# Demonstrates: The Hub's safety when a non-existent domain is requested
+POST http://localhost:3000/approve/MARKETING
+Content-Type: application/json
+
+{
+  "data": "irrelevant"
+}

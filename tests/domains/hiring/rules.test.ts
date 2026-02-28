@@ -1,4 +1,4 @@
-import { hiringEngine } from "../src/domains/hiring";
+import { hiringEngine } from "../../../src/domains/hiring";
 
 describe("Hiring Approval Engine", () => {
   const cases = [

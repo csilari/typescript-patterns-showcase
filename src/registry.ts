@@ -7,6 +7,11 @@ const approvalHub: Record<Domain, Engine> = {
   HIRING: hiringEngine,
 };
 
+/**
+ * The Dispatcher / Router
+ * Responsibility: Coordinating between the Transport Layer (API)
+ * and the Domain Engines stored in the approvalHub.
+ */
 export function routeRequest(domain: Domain, data: unknown): ApprovalResult {
   const engine = approvalHub[domain];
   return engine

@@ -1,4 +1,4 @@
-import { expenseEngine } from "../src/domains/expenses";
+import { expenseEngine } from "../../../src/domains/expenses";
 
 describe("Expense Approval Engine", () => {
   const cases = [

@@ -2,7 +2,7 @@
 
 A production-grade, type-safe architectural pattern for handling complex business approval logic across multiple domains (Expenses, Hiring, etc.).
 
-## 🚀 The Problem
+## The Problem
 
 As platforms scale, business rules (e.g., "Auto-approve software under £500") often become a "spaghetti" of nested `if/else` or `switch` statements. This makes the code:
 
@@ -10,7 +10,7 @@ As platforms scale, business rules (e.g., "Auto-approve software under £500") o
 2. **Untyped:** Handling raw JSON from APIs often leads to runtime `undefined` errors.
 3. **Hard to Scale:** New domains require modifying core routing logic.
 
-## 🏗️ The Solution (Architectural Patterns)
+## The Solution (Architectural Patterns)
 
 This project demonstrates three patterns to solve these issues:
 
@@ -36,7 +36,7 @@ A central `ApprovalHub` acts as a router for the entire application.
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 - **TypeScript (Strict Mode):** Leveraging advanced features:
   - **Discriminated Unions** for safe result handling.
@@ -47,20 +47,27 @@ A central `ApprovalHub` acts as a router for the entire application.
 
 - **Zero Dependencies:** Pure TypeScript to demonstrate core language mastery.
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 /src
-  /core        # Reusable abstractions (The "Framework")
-  /domains     # Specific business units (The "Plugins")
-  registry.ts  # The glue connecting everything
+  /core        # The "Framework" (Factory, Types)
+  /domains     # The "Plugins" (Expense and Hiring logic)
+  registry.ts  # The "Dispatcher" (Entry point logic and Domain Engines Hub)
+  server.ts    # The "Transport Layer" (Express API)
 
 ```
 
-## 🧪 Testing
+## Testing
 
 The project uses table-driven tests to ensure 100% coverage of approval logic.
 
 ```bash
 npm test
 ```
+
+## End-to-End Integration
+
+This repository includes a reference implementation of a REST API. It demonstrates how the Registry Pattern allows for 'Thin Controllers' by **delegating all validation and business logic to domain-specific engines**. This ensures that the transport layer (Express) remains decoupled from the core business rules.
+
+I have included a `requests.http` file. This allows for rapid architectural probing. You can observe how the system differentiates between **Schema Validation failures** (via Type Guards), **Business Logic rejections** (via Strategies), and **Routing errors** (via the IoC Registry).
