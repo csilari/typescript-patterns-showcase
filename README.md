@@ -8,11 +8,11 @@ As platforms scale, business rules (e.g., "Auto-approve software under £500") o
 
 1. **Fragile:** Adding a new rule risks breaking existing ones.
 2. **Untyped:** Handling raw JSON from APIs often leads to runtime `undefined` errors.
-3. **Hard to Scale:** New domains require modifying core routing logic.
+3. **The "Registry" Bottleneck:** In standard apps, adding a new domain (like 'Payroll') requires modifying a central file, creating merge conflicts and tight coupling.
 
 ## The Solution (Architectural Patterns)
 
-This project demonstrates three patterns to solve these issues:
+This project demonstrates a **Pluggable Architecture** to solve these issues:
 
 ### 1. Strategy Pattern (Domain Logic)
 
@@ -28,11 +28,12 @@ A generic `createApprovalEngine` factory bridges the gap between **Runtime Valid
 - **Benefit:** DRY (Don't Repeat Yourself). The factory handles the boilerplate of validation and routing.
 - **Implementation:** Uses **Type Predicates** (`data is T`) to safely narrow `unknown` API data.
 
-### 3. Registry Pattern (The Hub)
+### 3. Inversion of Control / IoC (The Registry)
 
-A central `ApprovalHub` acts as a router for the entire application.
+Instead of a hard-coded "Hub," we use an **IoC Container**.
 
-- **Benefit:** Decoupled architecture. The API controller only interacts with the Hub, not the individual engines.
+- **Benefit:** **True Decoupling.** The "Core" doesn't need to know which domains exist. Each domain (Expense, Hiring) "plugs itself in" during the app startup.
+- **Implementation:** A singleton **Container** that manages a registry of engines, allowing squads to scale independently without touching core files.
 
 ---
 
@@ -43,7 +44,9 @@ A central `ApprovalHub` acts as a router for the entire application.
   - **Type Predicates** for bridging the gap between API data and types.
   - **Mapped Types & Generics** for exhaustive business logic.
 
-- **Jest:** **Table-driven testing** for business edge cases.
+- **Jest:**
+  - **Table-driven testing** for business edge cases.
+  - **Mocking & Spy logic** to verify the IoC Container registration.
 
 - **Zero Dependencies:** Pure TypeScript to demonstrate core language mastery.
 
@@ -51,19 +54,21 @@ A central `ApprovalHub` acts as a router for the entire application.
 
 ```text
 /src
-  /core        # The "Framework" (Factory, Types)
+  /core        # The "Framework" (Factory, IoC Container, Types)
   /domains     # The "Plugins" (Expense and Hiring logic)
-  registry.ts  # The "Dispatcher" (Entry point logic and Domain Engines Hub)
+  bootstrap.ts # The "Initializer" (Plug everything in)
+  router.ts    # The "Dispatcher" (Entry point logic)
   server.ts    # The "Transport Layer" (Express API)
 
 ```
 
 ## Testing
 
-The project uses table-driven tests to ensure 100% coverage of approval logic.
+The project ensures 100% coverage by testing both the **Business Rules** (Table-driven) and the **Infrastructure** (Container/Mocks).
 
 ```bash
 npm test
+
 ```
 
 ## End-to-End Integration

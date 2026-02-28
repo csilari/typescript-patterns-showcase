@@ -1,4 +1,4 @@
-import { expenseEngine } from "../../../src/domains/expenses";
+import { expenseApprovalEngine } from "../../../src/domains/expenses";
 
 describe("Expense Approval Engine", () => {
   const cases = [
@@ -52,7 +52,7 @@ describe("Expense Approval Engine", () => {
 
   // Run the table
   test.each(cases)("$name", ({ input, expected }) => {
-    const result = expenseEngine(input);
+    const result = expenseApprovalEngine(input);
     expect(result).toEqual(expected);
   });
 });

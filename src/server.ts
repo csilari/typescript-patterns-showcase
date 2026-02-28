@@ -1,5 +1,7 @@
+import "./bootstrap";
+
 import express, { Request, Response } from "express";
-import { routeRequest } from "./registry";
+import { routeRequest } from "./router";
 import { Domain } from "./core/types";
 
 const app = express();

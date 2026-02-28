@@ -1,4 +1,4 @@
-import { hiringEngine } from "../../../src/domains/hiring";
+import { hiringApprovalEngine } from "../../../src/domains/hiring";
 
 describe("Hiring Approval Engine", () => {
   const cases = [
@@ -57,7 +57,7 @@ describe("Hiring Approval Engine", () => {
 
   // Run the table
   test.each(cases)("$name", ({ input, expected }) => {
-    const result = hiringEngine(input);
+    const result = hiringApprovalEngine(input);
     expect(result).toEqual(expected);
   });
 });
